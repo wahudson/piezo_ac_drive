@@ -1,0 +1,64 @@
+2018-10-27
+		Parts Order - HV Piezo Tube Driver
+		-----------
+    $Id: parts_order.2018_10_27.txt,v 1.1 2018/10/27 18:28:26 wah Exp wah $
+
+    Quantity:  N+M
+	N = quantity required for 2-channel HV driver.
+	M = extra for spare or alternate prototype
+
+    Vendor:  DigiKey
+    Cart name:  piezo_drive_Jesse
+
+    Cart share:  https://www.digikey.com/short/j0hf13
+    Subtotal: $142.56
+
+    Jesse Wilson will order.
+
+
+HV piezo driver:
+----------------
+
+    Transformer  5.0 VA, 7v/14V secondary, 115V/230V primary
+ 2	$20.77  DigiKey  1295-1108-ND,  Talema 62020
+
+    LM675  Power Operational Amplifier, 3A
+ 2+1	$5.70  DigiKey  LM675T/NOPB  TO220-5
+
+    Capacitor 220 uF, 100 V, +-20%  Electrolytic
+ 2+2	$1.27  DigiKey  1189-1040-ND  Rubycon 100ZLJ220M12.5X25
+
+    Resistor, Wirewound  5 W, 5%
+	-- Vishay BC Components
+ 2+2	$0.78  DigiKey  AC05000001009JAC00  10 ohm, 5%, 5W
+ 2+2	$0.78  DigiKey  AC05000001008JAC00   1 ohm, 5%, 5W
+
+    Fuse Block, 5mm x 20mm fuse
+ 2	$1.51  DigiKey  F1503-ND,  Littelfuse 05200004Z     Solder terminal
+
+    Fuse cartridge, 5mm x 20mm, glass, 250mA
+ 2+4	$0.22  DigiKey  507-1241-ND, BelFuse 5ST 250-R,  250mA
+
+    Breadboard PCB, DIN rail, 3.42"L x 1.29"W
+ 1+1	$3.60  DigiKey  377-2076-ND, Bud Industries  DMB-4770-CB
+
+
+Cable and connector:
+--------------------
+
+    Connector, Circular, 6-position solder cup
+    	-- Conxall/Switchcraft  Micro-CON-X
+ 2	$12.51 DigiKey  SC1430-ND,  16982-6SG-522  Plug, sockets, 0.23 in cable
+ 2+1	$7.37  DigiKey  SC1413-ND,  17982-6PG-300  Receptical, pins
+
+    Cable, 4-conductor (2 pair twisted), 300 Vrms, Cat5e
+ 1	$10.18  DigiKey   A74002B-10-ND,  10 ft
+
+
+HV Test and Characterization:
+-----------------------------
+
+    Resistor, Metal Film, 1 W, 0.1%
+	-- Vishay Dale
+ 2+2	$0.94  DigiKey  CPF1100K00BHEE6  100 kohm, 0.1%, 1 W
+

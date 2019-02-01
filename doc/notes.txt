@@ -1,0 +1,51 @@
+2018-11-10
+
+Idea:  Use an inductor to cancel piezo tube capacitance at the frequency
+    we are operating.  Not at resonance.  This may help the driver amplifier.
+    Series L, parallel C, low-pass configuration.
+    We are using a fixed, narrow, frequency.
+
+
+----------------------------------------------------------------------------
+## References
+----------------------------------------------------------------------------
+2018-11-10
+
+Google:  ultrasonic transducer amplifier
+
+Power amplifier for ultrasonic transducer excitation
+    L. Svilainis, G. Motiejûnas
+    ISSN 1392-2114 ULTRAGARSAS, Nr.1(58). 2006.
+    Using a step-up transformer in 50 kHz to 3 MHz range.
+    Output voltage to 500 Vpp.
+    Used N27 material EPCOS toroidal ring core RM25.
+    Lots of modeling, and some actual results.
+    https://www.researchgate.net/publication/228363969_Power_amplifier_for_ultrasonic_transducer_excitation
+
+Accel Instruments
+    Specialize in high-frequency and high-current general purpose amplifiers.
+    Note their TS250 amplifier has several applications.
+    https://www.accelinstruments.com/Piezo/Piezo-Amplifier.html
+
+Low Cost Matching Network for Ultrasonic Transducers
+    M. Garcia-Rodriguez*, J. Garcia-Alvarez, Y. Yañez, M.J. Garcia-Hernandez,
+	J. Salazar, A. Turo, J.A. Chavez
+    International Congress on Ultrasonics, Universidad de Santiago de Chile,
+	January 2009
+    Physics Procedia 3 (2010) 1025-1031
+    https://www.sciencedirect.com/science/article/pii/S1875389210001331
+    Matching network at series resonance of the transducer.
+    Using an LC low-pass form of matching network (i.e. series L, followed by
+    parallel C to ground).  Effectively cancelling the imaginary part of
+    the load impedance at resonance.  The overall impedance is lowered by
+    a factor of 10 (2000 ohm to 200 ohm).
+    The transducer power is maximum at resonance, and is about 5 times
+    greater with the matching network.
+    The 800 kHz transducer has BVD (Butterworth-Van-Dyke model) parameters:
+	Rs= 1.8 kohm, Ls= 1.6 mH, Cs= 26 pF, Co= 65 pF
+	Matching network:  Lm= 58.8 uH, Cm= 588 pF
+	Agilent 4294A Precision Impedance Analyzer.
+    Note the matching capacitance Cm is 10x the transducer capacitance Co,
+    which explains why the overall impedance is 10x lower.
+    Ultrasonic transducers are typically operated at resonance, it seems.
+

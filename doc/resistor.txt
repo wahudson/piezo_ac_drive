@@ -1,0 +1,48 @@
+2018-12-03
+
+Resistor Spec
+
+Rc - current sensing
+
+f_Hz	given condition
+Vp_V	given condition, peak
+Ic_mA	peak, extrapolated from measurement
+Vc_mV	peak = Ic_mA * Rc_ohm
+Pc_mW	rms  = (Ic_mA ^2) * Rc_ohm / 1000 / sqrt(2)
+
+f_Hz	Vp_V	Ic_mA	Rc_ohm	Vc_mV	Pc_mW
+
+ 500	 5	 54	10	 540	  14
+
+1000	 5	108	10	1080	  58
+1000	10	216	10	2160	 230
+1000	20	432	10	4320	 930
+
+2000	 5	215	10	2150	 230
+2000	20	860	10	8600	3700
+
+
+ 500	 5	 54	 5	 270	   7
+1000	 5	108	 5	 540	  29
+1000	20	432	 5	2160	 466
+2000	20	860	 5	4300	1850
+
+
+ 500	 5	 54	 2	 108	   3
+1000	 5	108	 2	 216	  12
+1000	20	432	 2	 864	 187
+2000	20	860	 2	1720	 740
+
+
+Max 700 mA rms:  1000 mA peak  limited by transformer current
+--	--	1000	10	10000	5000
+--	--	1000	 5	 5000	2500
+--	--	1000	 2	 2000	1000
+
+Thus:
+    2 ohm, 3 W  looks good.
+    5 ohm, 5 W  possible alternative.
+
+3W has temperature rise of 110K at 1W.
+5W has temperature rise of  80K at 1W.
+

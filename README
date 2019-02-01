@@ -1,0 +1,29 @@
+2019-01-31
+		Piezo AC Driver Project
+		-----------------------
+
+A project to build a high-voltage AC piezo tube driver circuit.
+It is an AC amplifier.
+    Frequency:  100 to 2000 Hz  sinusoid
+    Input:   0 to   2 V
+    Output:  0 to 250 V
+    Principle of operation:  Audio amplifier driving a step-up transformer.
+
+See also:  /home/wah/pro/csu_engr/jesse_wilson/
+
+Files:
+------
+README		this file
+
+doc/		documentation
+exp/		experiments
+kicad/		Kicad schematics
+ngspice/
+
+
+Repository History:  (newest first)
+----------------------------------------------------------------------------
+(2018-01-31)  Initial GIT repository
+
+(2018-10-27)  Initial development
+

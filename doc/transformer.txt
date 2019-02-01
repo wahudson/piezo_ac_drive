@@ -1,0 +1,70 @@
+2018-11-03
+
+		Transformer Properties
+		----------------------
+
+----------------------------------------------------------------------------
+## Transformer Losses
+----------------------------------------------------------------------------
+
+Main concern:
+    My concern is operating a 60Hz power transformer at 1kHz.  What could
+    go wrong?
+    We accept however it actually performs, but we do not want it to overheat.
+
+    Idea is to measure actual power into the transformer at our actual
+    operating conditions.  Subtract the power in the load to get power
+    dissapated in transformer.
+    Monitor transformer temperature rise.
+
+
+Paper [1] presents actual measurements of core loss as a function of
+    frequency, and seperates it into hysteresis loss and eddy current loss.
+
+    Hysteresis power   is proportional to frequency.
+    Eddy current power is proportional to frequency squared.
+
+    These losses can be directly measured on transformer with no load.
+
+
+----------------------------------------------------------------------------
+## Transformer Measurement Experiments
+----------------------------------------------------------------------------
+
+Measurements:
+
+1) Primary inductance.
+	Measure with no load.
+
+2) Leakage inductance.
+	Measure with secondary shorted.
+
+3) Core losses.
+	Measure power consumed with no load. Sweep frequency.
+
+    Start with low voltage level and minimum power to see how bad it is.
+    Expect loss could rise to several watts with frequency.  Could get
+    quite hot.
+
+4) Temperature rise.
+    Want to measure inside core, but have no access.
+
+    a) Measure on inside surface of toroid, with toroid hole filled with
+    insulation (like styrofoam).
+
+    b) Shut off power and measure average temperature after thermal gradient
+    relaxes throughout the transformer.  Imurse transformer in insulation
+    so no heat is lost.  Assume linear temperature gradient existed when
+    operational, and extrapolate what the core temperature would have been
+    from the surface temperature, assuming uniform heat capacity througout.
+
+
+----------------------------------------------------------------------------
+## References:
+----------------------------------------------------------------------------
+
+[1] Core Loss Characteristics Analysis of Power Transformer
+	Under Different Frequencies Excitation
+    2013 IEEE International Power Engineering and Optimization Conference.
+    https://www.researchgate.net/publication/261194223_Core_loss_characteristics_analysis_of_power_transformer_under_different_frequencies_excitation
+

@@ -1,0 +1,397 @@
+2018-10-27
+William A. Hudson
+
+		HV Piezo Tube Drive Circuit
+		---------------------------
+
+Design notes.
+
+See also:  Schematic PDF, hand drawn.
+
+$Id: schematic_design.txt,v 1.1 2018/10/27 15:44:21 wah Exp $
+
+----------------------------------------------------------------------------
+## Basic Idea
+----------------------------------------------------------------------------
+
+    Use a power transformer in step-up voltage mode.
+    i.e.  20:1 voltage ratio.
+    25 Vpp input give 500 Vpp output.
+
+    Two identical channels will be used to drive the X and Y electrode pairs
+    of the piezo tube.
+
+----------------------------------------------------------------------------
+## General Requirements.
+----------------------------------------------------------------------------
+
+Load:
+    PiCeramic.com  model PT230.94 piezo tube.
+    Piezo tube electrodes are the load, purely capacitive.
+    The two electrodes in a complementary pair are 2.1 nF each, with
+    a maximum voltage of +-250 V (+-500 V across the pair).  Peak voltage.
+
+    The two electrode capacitors are in series (to the inner tube electrode),
+    and thus the combined capacitance is (2.1 nF / 2).
+
+    Nominal:  1 nF capacitive load.  This is the design point.
+    Range:    2 nF maximum, opportunistic at lower voltage or frequency.
+
+Frequency range:  Sinusoidal
+    Nominal:  1 kHz
+    Range:  0.5 kHz to 2 kHz
+    This is suitable for a 1 second frame rate.
+
+IS constant frequency, once resonance is found.
+
+NOT flat frequency response.  But it would be nice.
+    We can adjust input amplitude as we change frequency.
+
+NOT DC capable.
+    Since we operate the fiber scanner at resonance of the fiber, we
+    never go down to DC.
+
+Objective of the first version is to prove the concept and operate at
+    the nominal point.  Then refine the design to operate over a wider
+    range if necessary.
+
+
+----------------------------------------------------------------------------
+## Detail Schematic
+----------------------------------------------------------------------------
+
+General concept is a LM675 power op-amp driving the low-voltage side
+of a power transformer to step up voltage to 500 Vpp.
+
+Work backward from the load to the input.
+
+Transformer:  T1
+
+    The output is center tapped to provide a ground reference.
+    The two piezo electrodes are equal capacitance (nominal 2.1 nF).
+    By symmetry, the piezo inner electrode is then at virtual ground.
+
+    Consider the transformer as ideal for initial design purposes.
+    Use a toroidal transformer for lowest leakage inductance.
+
+    Toroidal Transformer  5.0 VA, 7v/14V secondary, 115V/230V primary
+	-- Talema Group LLC
+	Open toroid, long leads.  Dual primary and secondary.
+	Primary  2x 115 V, series is 230 V
+	Full load  2x 7.0 V, 357 mA
+	No load    2x 9.7 V,   0 mA,  ratio 11.8:1
+	HV Test 4.0 kV pri-sec
+	Size:  47.6 mm OD, 6.0 mm ID, 18.0 mm H
+	http://www.talema.com/uploads/documents/product-datasheets/Transformer%20Catalog.pdf
+	$20.77  DigiKey  1295-1108-ND,  Talema 62020
+
+	* Note:  we redefine Primary as the low-voltage side, and
+	Secondary as the high-voltage side, to fit our application.
+	The Primary is the driven side.
+
+    This transformer is spec'ed as a 60Hz power transformer.
+    We intend to operate it outside of this application space, and we
+    accept whatever attributes it has when we do so.
+    Audio (vacuum tube) transformers are essentially a glorified power
+    transformer, and they operate at these voltages from 70 Hz to 15 kHz.
+
+    Current rating:
+    Our capacitive load results in quite low currents, even at f= 10 kHz.
+
+    The turns ratio is
+	Nr = Ns / Np
+	    Ns = secondary turns
+	    Np = primary turns
+	Nr > 1  is step up;  Nr < 1  is step down.
+
+    The dual secondaries (high-side windings) are connected in series to
+    provide a center tap.
+
+    The dual primaries (low-side windings) are connected in parallel to
+    give the largest turns ratio.
+
+    The turns ratio is the ratio of Secondary voltage to the Primary
+    voltage at no load:
+	Nr = Vs / Vp
+	    Vs = 230 V  (series)   secondary voltage
+	    Vp = 9.7 V  (parallel)   primary voltage
+	Nr = 23.7  +-0.3
+	Nr^2 = 562    impedance transformation factor (turns ratio squared)
+
+Primary Voltage:  Vp
+
+    Is a single frequency sinusoid.
+
+    Vs = Nr * Vp	secondary voltage
+    Secondary voltage is determined by max load voltage
+    Vs = 500 Vpeak  = 354 Vrms max
+
+    Vp = Vs / Nr
+       = (500 Vpeak) / 23.7
+    Vp = 21.1 Vpeak = 14.9 Vrms max
+
+Primary Load:  Cp
+
+    We use this as the load the op-amp sees.
+
+    The load impedance (Cs = 1 nF) is transformed to the primary by
+	Cp = ((Nr)**2) * Cs
+	Cp = 560 nF
+
+    The capacitive reactance is
+	Xp = 1 / ( 2*Pi * f * Cp )
+	    Pi = 3.14
+	    f  = frequency
+	Xp = 284 ohm  at f= 1kHz
+	     142 ohm  at f= 2kHz
+
+    The Primary Current Ip at maximum Vs is 
+	Ip = Vp / Xp
+	   = 14.9 Vrms / 284 ohm  =  52 mArms   at f= 1kHz
+	   = 14.9 Vrms / 142 ohm  = 105 mArms   at f= 2kHz
+
+	Note we are neglecting the primary current required to create
+	the magnetic flux in the transformer core.
+	In an ideal transformer it depends only on the primary inductance
+	(with secondary open) and the primary voltage.  [2]
+
+AC coupling capacitor:  Co
+
+    The magnetic core of a transformer will saturate if a DC voltage is
+    applied across any coil.
+
+    Thus we use an AC coupling capacitor, labled Co.
+    Its impedance should be at least 100x lower than the load for a 1%
+    loss.
+    Choose a 220 uF capacitor (a common value).
+	Co / Cp = 220 uF / 560 nF = 293
+    This looks like a good enough ratio.
+
+    Choose an electrolytic capacitor, which is polarized.  Non-polar
+    capacitors are not common in this value range.
+
+    To be sure the capacitor is not reverse biased, we connect the
+    low side of the transformer primary to Vnn, the op-amp negative
+    supply.  The op-amp can only output voltages greater than Vnn.
+    [Connecting to ground would also work for signal coupling, but
+    will reverse bias the capacitor.]
+
+    Voltage rating:  100 V (is common).
+    The op-amp maximum supply is +-30 V (60 V to Vnn).  The capacior
+    should be able to withstand this voltage as a minimum.  Usually
+    choose a capacitor working voltage around 2x the maximum expected
+    voltage.
+
+    Ripple current rating:
+    Is an important parameter for a coupling capacitor as well as a
+    filter capacitor.  I choose one with a high ripple current rating,
+    even though a lesser rating probably would be acceptable.
+    But see "Short Circuit Protection" below.
+
+    Capacitor  220 uF, 100 V, +-20%  Electrolytic
+	Ripple current:  1.134 A @ 120Hz,  1.62 A @ 100 kHz
+	Impedance:  47 mOhm
+	Size:  0.492" Dia, 1.063" L
+	Lifetime:  10000 Hrs at 105 C
+	http://www.rubycon.co.jp/en/catalog/e_pdfs/aluminum/e_zlj.pdf
+	$1.27  DigiKey  1189-1040-ND  Rubycon 100ZLJ220M12.5X25
+
+Output Resistor:  Ro
+
+    Most power amplifiers do not drive highly capacitive loads well,
+    i.e they ring or oscillate.
+    A way to help is to add a resistor, at least 1 ohm, in series with
+    the output.
+
+    The LM675 datasheet application hints:
+    It can drive up to 2 uF.
+    The square wave response will exhibit ringing with more than 0.1 uF
+    and no series resistance.
+
+    A series resistor will add a voltage drop on the output.  We can
+    tolerate this, since we generally operate at constant frequency and
+    constant capacitive load (and thus constant output current), and we
+    can adjust input signal to compensate.
+
+    Nominal voltage drop:
+    Vro = Ip * Ro
+        = ( 52 mArms) * 10 ohm  = 0.52 Vrms   at f= 1kHz
+        = (105 mArms) * 10 ohm  = 1.05 Vrms   at f= 2kHz
+
+    Nominal power:  (but see "Short Circuit Protection")
+    Pro = Ip * Vro
+        = 105 mArms * 1.05 Vrms = 0.11 Wrms   at f= 2kHz
+
+Op-amp Gain:  R1, Rf
+
+    The LM675 datasheet examples show resistor values in 1k to 10k ohm range.
+    It is internally compensated for gains of 10 or greater.
+
+    Choose gain of 10.
+    For Vp = 21.1 Vpeak, input Vi= 2.1 Vpeak.
+
+    Choose R1= 1 kohm, Rf= 9.1 kohm
+    Non-inverting amplifier configuration, gain
+    G = 1 + (Rf / R1)
+      = 1 + (9.1 kohm / 1 kohm)  = 10.1
+
+Input Signal:  Ri
+
+    The input is DC coupled for simplicity of design, but it should have
+    no DC offset.
+
+    Ri Input load resistor to ground.
+    This is to prevent the input from floating when no signal source is
+    connected.
+    Choose  Ri = 22 kohm, as in the datasheet.
+
+    Possible input features:  (after initial prototype)
+
+    a) Provide AC input coupling.  This would mainly avoid any DC offset
+    multiplied by the gain shifting the op-amp output toward one supply
+    rail or the other and thus possibly clipping.
+
+    b) An input low-pass filter.  Use to prevent too high an input frequency
+    creating excessive current.
+
+Power Supplies:
+
+    The LM675 op-amp can have supplies from +-8 V to +-30 V.
+    Nominal +-24 V should allow maximum output of 500 Vpeak.
+    Probably start with +-15 V, since that is fairly common.
+    Use lab power supply to start.
+
+Power up sequencing and transients:
+
+    Initially we should bring up the supplies first, then apply signal.
+
+    A fast transient on the transformer input will probably generate a
+    high- voltage spike on the output.
+    We should observe prototype circuit transients, and be sure they
+    do not exceed any breakdown voltage limits.
+
+
+----------------------------------------------------------------------------
+## Short Circuit Protection
+----------------------------------------------------------------------------
+
+    It is possible that the piezo tube electrode contacts become short
+    circuited thru various accidents.
+    If that happens, we do not want the driver electronics damaged.
+
+    When the transformer output is shorted (i.e. zero ohm load), that
+    low impedance is reflected into the primary, which then also
+    appears shorted.
+    The op-amp output and all series components (i.e. Ro, Co, and
+    transformer primary winding) must be able to handle the resulting
+    current and corresponding power dissapation.
+
+    In short circuit condition, the current is limited by what the
+    op-amp can drive.
+    Examine the current (power) handling ability of each component.
+
+    Transformer primary:
+    Its application rating is 357 mA (rms) at full load.  This is likely
+    an application power limit, and not the wire current limit.
+    We want to keep transformer power below the 5 Watt rating.
+    At our max primary voltage Vp:
+        5 W / 14.9 Vrms  = 336 mArms  = max Ip allowed
+
+    Coupling Capacitor:  Co
+    Max ripple current is 1.134 Arms.
+
+    Output Resistor:  Ro
+    Normal power is (105 mArms)^2 * (10 ohm) = 0.11 Wrms.
+    It is limited by power dissapation.  Assume all voltage is dropped
+    accross it (worst case).
+    P = V^2 / R  = ((15 Vrms)^2) / 10 ohm  = 22.5 Wrms
+    I = V   / R  = 15 Vrms / 10 ohm        = 1.5 Arms
+    Note this current is too high for the transformer rating, so we
+    cannot rely only on the resistor limiting current.
+
+    Op-amp:  LM675
+    The LM675 op-amp can drive up to 3 A at full voltage.
+    It does have built-in thermal shutdown and fixed current limit.
+
+    Thus transformer current is really the limiting factor.
+
+    Protection mechanisms:
+    A) Fuse
+	+ Pretty reliable protection.
+	- Replacing blown fuses is annoying.
+    B) Limit op-amp supply current.
+	+ Simple.
+	- How does op-amp behaive at low supply voltages?
+    C) Use Op-amp with adjustable current limit.
+	+ Direct control.
+	- Cost more.  Not in LM675
+
+Protection Solution choosen:
+    Do all of this.
+
+    Fuse:  F1
+    Choose 250 mA fuse.
+    Is well above nominal operating current of 105 mArms.
+    Is well below transformer power limit   of 336 mArms.
+
+    Power supply current limit:
+    This is the max power under fault conditions until fuse blows.
+    The same supply will likely power two channels (X and Y drive).
+    Limit power supply current to 500 mA.
+
+    Output resistor:  Ro
+    Use 10 ohms to help limit current.
+    Choose power rating to handle the max supply current (500 mA).
+    P = I^2 * R  = (500 mA)^2 * 10 ohm = 2.5 W
+    Choose 5 W rating (twice the expected power).
+
+    This initial design is experimental - for attended operation only.
+
+----------------------------------------------------------------------------
+## Transformer Voltage rating:
+----------------------------------------------------------------------------
+    Transformers are specified in RMS (root mean square), which is average
+    power for a sinusoidal waveform.
+	Vpeak = sqrt( 2 ) * Vrms
+    The high side voltage as spec'ed is 230 Vrms, which is 325 Vpeak.
+    The isolation voltage between primary and secondary is rated at 4 kV.
+    
+    The Talema transformer does not specify the insulation strength between
+    the two primary coils (an Amgis transformer did specify 0.5 kV AC).
+
+    A transformer connected to the power mains must tolerate the transient
+    overvoltages which are normal in a Mains circuit, typically 1000 V.
+    Our application is isolated from the Power Mains, and thus can use the
+    full insulation electric strength as the working voltage.  [1]
+
+    Thus we expect the transformer high side should be good to 500 Vpeak,
+    but we must accept whatever it ends up being.  The worst that happens
+    is an internal short within the high-side coil, reducing its
+    effectiveness.  At 500 Vpeak, there should be no short to the core or
+    to the low side coil, since that is specified to withstand 4 kV.
+
+    Thus I think we are safe to operate the high-side coil to 500 Vpeak
+    (the max piezo tube voltage), and there should be no safety hazard
+    even if the high-side coil insulation does breakdown.
+
+    Insulation breakdown probably results in a pinhole, possibly shorting
+    the wire coil, or creating a little spark gap that conducts when the
+    AC sine wave reaches a high enough voltage.  The transformer is thus
+    generally ruined.
+
+    We could conduct a high-potential test between the windings.
+
+
+----------------------------------------------------------------------------
+## References
+----------------------------------------------------------------------------
+
+[1]  Working Voltage, Electric Strength, and Spacings
+    by Richard Nute on May 31, 2016
+    https://incompliancemag.com/article/working-voltage-electric-strength-and-spacings/
+
+[2]  Clarifying concepts and gaining a deeper understanding of ideal
+	transformers
+	Chiu-King Ng 2018 Eur. J. Phys. 39 035205
+	https://doi.org/10.1088/1361-6404/aaabc4
+
