@@ -1,0 +1,314 @@
+2018-11-26  William A. Hudson
+
+	    Transformer AC Measurements
+	    ---------------------------
+
+From:  Bill's notebook 2018-11-21, has schematic
+
+Purpose:
+    To measure performance of the Talema 62020 Toroid transformer in step-up
+    mode as driven by an LM675 power op-amp.
+
+    Two data sets:
+	d_open.tab	no load on transformer output
+	d_cload.tab	Cl= 2 nF capacitor across output windings in series
+
+    Imput is a single frequency sinusoid.
+
+    Keep transformer output at 60 Vpeak across a single winding, thus
+    keeping magnetic flux in the core constant at all frequency points.
+
+    Current is measured by the voltage drop across a 10 ohm resistor in
+    series with the primary.
+
+    Sweep frequency 60 Hz to 4 kHz and measure voltages with oscilloscope.
+
+
+Procedure:
+    Amplifier input is a single frequency sinusoid from an Agilent 33522A
+    function generator, which has 50 ohm output impedance.
+
+    The op-amp output is AC coupled through a 220 uF, 100 V electrolytic
+    capacitor to the transformeer high side.
+
+    The function generator amplitude is adjusted to provide 60 Vpeak
+    transformer output on a single winding.  Measurement of time delay
+    (phase) is made with this output voltage signal as the reference
+    (scope trigger).
+
+    Oscilloscope measurements are made at points:  (AC coupled)
+	Vin = input to amplifier
+	Va  = high side of transformer.
+	Vc  = low side of transformer, connected to Rc current resistor,
+		which returns to the Vnn negative power supply.
+
+	Measurement cursors were manualy positioned to read out peak
+	voltage (Y1 cursor) and rising edge time delay (x1 cursor).
+	Caution:  The trigger level must be zero (0 mV) on the AC sinusoid.
+	The horizontal and vertical positions were also kept at zero,
+	but may not be necessary as the cursors know where zero is.
+
+    Measured parameters:
+	f_Hz	frequency (Hz)
+	Vs_Vpp	function generator amplitude setting (V peak-to-peak)
+	Vin_mVp	op-amp input (mV peak)
+	Va_Vp	high side of transformer (V peak)
+	Vc_mVp  low  side of transformer (mV peak)
+	Tc_us	time delay of Vc_mVp rise (us)
+	Ta_us	time delay of Va_Vp  rise (us)
+	Idc_mA  power supply meter current (mA DC)
+
+Analysis:
+    See R-script:  tranimeas
+
+    All results are peak (not peak-to-peak).
+
+    Parameter names are mostly systematic:
+	First letter
+	    I,V,P,Z  Current, Voltage, Power, Impedance
+	Second letter - measurement point
+	    c = at current measuring resistor Rc=10 ohm.
+	    a = at transformer primary in series with Rc.
+	    p = difference across transformer primary.
+	Third letter - type of value
+	    m = magnitude peak
+	    p = phase
+	    r = real part
+	    i = imaginary part
+	Units
+	    _Vpp	V  peak-to-peak
+	    _mVp	mV peak [probably should drop the p]
+	    _mA		mA peak
+	    _mW		mW peak
+	    _deg	phase degrees
+	    _rad	phase radians
+
+    The essence of calculation is:  (R-script)
+
+    # Read in data table
+	df <- read.table( InFile, header=TRUE )
+
+    # Period of sine wave
+	Ts_us <- (1 / df$f_Hz) * 1e6
+
+    # Phase of Vc
+	Vcp_rad <- (df$Tc_us / Ts_us) * 2 * 3.14159
+
+    # Phase of Va
+	Vap_rad <- (df$Ta_us / Ts_us) * 2 * 3.14159
+
+    # Let Vc (and Ic) be the reference aligned to the real axis.
+	Va_rad = Vap_rad - Vcp_rad
+	Vc_rad = Vcp_rad - Vcp_rad          # zero
+
+    # Complex voltages
+	Va_mVp <- df$Va_Vp * 1000
+	Va <- complex( modulus=Va_mVp,    argument=Va_rad )
+	Vc <- complex( modulus=df$Vc_mVp, argument=Vc_rad )
+
+    # Primary voltage mV  (complex arithmetic)
+	Vp <- Va - Vc
+
+    # Primary current mA  (Rc= 10 ohm)
+	Ic <- Vc / 10
+
+    # Primary power mW  (1000 mW/W)
+	Pp <- Vp * Ic / 1000
+
+    # Primary impedance ohm
+	Zp <- Vp / Ic
+
+    # Model Zp as series R and C (or L)
+	Rz = Re(Zp)
+	Cz = -1 / ( 2 * 3.14 * df$f_Hz * Im(Zp) )
+	Lz = Im(Zp) / ( 2 * 3.14 * df$f_Hz )
+
+
+Limits:
+    Ic_mA:  Winding current capacity.
+	Transformer primary is rated at 357 mA each winding.  This is RMS,
+	so for two parallel windings:
+	357 mA * 2 * sqrt(2) = 1010 mA peak
+
+    Ppr_mW:  Real power disapated in the transformer.
+
+Summary data:
+    The no-load "open" results represent transformer loss, which is quite
+    large at these frequencies of interest (but not bad for a 60Hz power
+    transformer).
+
+    All for 60 Vpeak transformer output voltage.
+
+    At f_Hz= 1000 Hz  nominal frequency:
+		   open   2nF
+	Vpm_mVp = 5097   5175	Primary voltage (peak)
+	Ic_mA   =   73.0  108.0	Primary current (peak)
+	Ppr_mW  =   89.7   71.2	Real power into transformer
+	Zpm_ohm =   69.8   47.9	Primary impedance (magnitude)
+
+	Note Ppr_mW went down with increasing 2nF load at 1000Hz - not sure why.
+
+    At f_Hz= 2000 Hz
+		  open    2nF
+	Vpm_mVp = 5136   5156	Primary voltage (peak)
+	Ic_mA   = 148.0  215.0	Primary current (peak)
+	Ppr_mW  = 111.9  209.6	Real power into transformer
+	Zpm_ohm =  34.7   24.0	Primary impedance (magnitude)
+
+    Amplifier gain:  Gain = 10.3
+	Fairly constant over all frequencies.
+
+    Transformer gain:  TGain = 11.6
+	Fairly constant over all frequencies.
+
+    Primary impedance - effective capacitance.
+		  open    2nF
+	Cz_uF   = -2.2   -3.3
+	Fairly constant over frequencies 250 Hz to 2000 Hz.
+	Not sure why the value is negative.  [Computing Zc = 1/(j*w*C), and
+	Im(Zp) is positive, so C = -1/(w*Im(Zc)) is negative.]
+
+	The load impedance Cl= 2nF is transformed to the primary by the
+	turns ratio squared.
+	TGain = 11.6 transformer voltage gain for one winding, is the
+	    half the turns ratio.
+	Nr = 2 * TGain = 23.2
+	Cp = Nr**2 * Cl = 23.2**2 * 2nF  = 1.1 uF
+
+	The change in Cz_uF from open to 2nF load is also 1.1 uF as predicted.
+	Interesting!
+	
+	It looks like the transformer primary appears capacitive at
+	frequencies over 250 Hz.
+
+	Could the transformer be self resonant around 125 Hz?  There is a
+	fairly large phase shift at the low frequencies.
+
+
+Extrapolating to full output voltage:
+
+    Using worst case 2nF load and f_Hz=2000
+
+    To reach 120 Vpeak output, double the input voltage (and current),
+    which is 4x the power.
+	Vpm_mVp = 1030 mV
+	Ic_mA   =  430 mA
+	Ppr_mW  =  840 mW
+
+    To reach 240 Vpeak output, 4x the input voltage (and current),
+    which is 16x the power.
+	Vpm_mVp = 2060 mV
+	Ic_mA   =  860 mA
+	Ppr_mW  = 3400 mW
+
+    This is within the 1000 mA peak winding current.
+    All the power will be dissapated in the transformer as loss.
+    At 3.4 Watts, it may get a little too hot, will need to monitor.
+    I feel 1 watt heat dissapation should be totally manageable.
+    Try it and see.
+
+    Core eddy current loss is proportional to the square of frequency.
+    The plot of real power seems to fit this:
+	scatter.smooth( dg$f_Hz, dg$Ppr_mW )
+    Keep frequency down to avoid.
+
+    At 1000 Hz full voltage 240 Vpeak estimate
+	Ppr_mW = 1400 mW
+
+    A smaller current resistor Rc= 2 ohm will be needed for full output
+    voltage.  This resistor is also essential to help op-amp stability
+    driving capacitive loads.
+
+
+Conclusions:
+
+    The system was operable from 60 Hz to 2 kHz with 60 Vpeak output on
+    one transformer winding, staying within current and power limits
+    of all components.  It works!
+
+    Extrapolating to 240 Vpeak output looks feasable as an upper limit.
+    At 2 kHz frequency, the primary current of 860 mA and real power of
+    3.4 W dissapated in the transformer looks manageable.
+    At 1 kHz real power less than 1 W should be very manageable.
+    Need to try it and see.
+
+    Thus it looks suitable as a high-voltage sinusoid piezo tube driver.
+
+
+----------------------------------------------------------------------------
+## Data
+----------------------------------------------------------------------------
+
+==> d_open.tab <==
+f_Hz	Vs_Vpp	Vin_mVp	Va_Vp	Vc_mVp	Tc_us	Ta_us	Idc_mA
+  62	1.040	490	5.10	  48	-800	-60	 17
+ 125	1.040	495	5.10	  77	-140	-50	 18
+ 250	1.040	500	5.15	 170	-900	-50	 21
+ 500	1.040	507	5.27	 356	-480	-50	 NA
+ 600	1.040	512	5.32	 435	-410	-38	 30
+ 800	1.040	515	5.30	 575	-300	-34	 35
+1000	1.040	500	5.32	 730	-224	-34	 40
+1200	1.040	515	5.32	 875	-204	-33	 45
+1400	1.050	520	5.40	1031	-174	-32	 50
+2000	1.080	535	5.55	1480	-122	-30	 66
+4000	1.220	612	6.32	2900	 -61	-28	115
+
+==> d_cload.tab <==
+f_Hz	Vs_Vpp	Vin_mVp	Va_Vp	Vc_mVp	Tc_us	Ta_us	Idc_mA
+ 500	1.050	NA	5.30	 537	-492	-56	33
+1000	1.070	NA	5.42	1080	-246	-48	52
+2000	1.150	NA	5.95	2150	-124	-43	88
+
+
+==> d_open.out <==
+   f_Hz Ic_mA Ic_deg Vc_deg Vpm_mVp Vpp_deg Ppm_mW Ppp_deg Ppr_mW Ppi_mW
+1    62   4.8      0  -17.9    5054    16.7   24.3    16.7   23.2    7.0
+2   125   7.7      0   -6.3    5023     4.1   38.7     4.1   38.6    2.8
+3   250  17.0      0  -81.0    5113    78.4   86.9    78.4   17.5   85.1
+4   500  35.6      0  -86.4    5204    81.2  185.3    81.2   28.3  183.1
+5   600  43.5      0  -88.6    5265    85.0  229.0    85.0   19.9  228.1
+6   800  57.5      0  -86.4    5197    82.8  298.8    82.8   37.5  296.5
+7  1000  73.0      0  -80.6    5097    76.1  372.1    76.1   89.7  361.1
+8  1200  87.5      0  -88.1    5146    83.3  450.3    83.3   52.7  447.2
+9  1400 103.1      0  -87.7    5167    82.5  532.8    82.5   69.7  528.2
+10 2000 148.0      0  -87.8    5136    81.5  760.1    81.5  111.9  751.8
+11 4000 290.0      0  -87.8    4858    73.6 1408.7    73.6  396.8 1351.7
+   f_Hz Vam_mVp Vap_deg Var_mVp Vai_mVp Idc_mA  Gain TGain
+1    62    5100    16.5  4889.6  1449.9     17 10.41 11.87
+2   125    5100     4.0  5087.3   360.2     18 10.30 11.95
+3   250    5150    76.5  1202.2  5007.7     21 10.30 11.73
+4   500    5270    77.4  1149.6  5143.1     NA 10.39 11.53
+5   600    5320    80.4   891.6  5244.8     30 10.39 11.40
+6   800    5300    76.6  1227.5  5155.9     35 10.29 11.55
+7  1000    5320    68.4  1958.4  4946.4     40 10.64 11.77
+8  1200    5320    73.9  1477.8  5110.6     45 10.33 11.66
+9  1400    5400    71.6  1707.4  5123.0     50 10.38 11.61
+10 2000    5550    66.2  2236.1  5079.6     66 10.37 11.68
+11 4000    6320    47.5  4268.1  4661.1    115 10.33 12.35
+   f_Hz Zpm_ohm Zpp_deg Zpr_ohm Zpi_ohm Rz_ohm Cz_uF Lz_mH
+1    62  1052.9    16.7  1008.7   302.1 1008.7  -8.5 775.8
+2   125   652.4     4.1   650.7    46.8  650.7 -27.2  59.6
+3   250   300.8    78.4    60.7   294.6   60.7  -2.2 187.6
+4   500   146.2    81.2    22.3   144.5   22.3  -2.2  46.0
+5   600   121.0    85.0    10.5   120.6   10.5  -2.2  32.0
+6   800    90.4    82.8    11.3    89.7   11.3  -2.2  17.8
+7  1000    69.8    76.1    16.8    67.8   16.8  -2.4  10.8
+8  1200    58.8    83.3     6.9    58.4    6.9  -2.3   7.8
+9  1400    50.1    82.5     6.6    49.7    6.6  -2.3   5.7
+10 2000    34.7    81.5     5.1    34.3    5.1  -2.3   2.7
+11 4000    16.8    73.6     4.7    16.1    4.7  -2.5   0.6
+
+==> d_cload.out <==
+  f_Hz Ic_mA Ic_deg Vc_deg Vpm_mVp Vpp_deg Ppm_mW Ppp_deg Ppr_mW Ppi_mW
+1  500  53.7      0  -88.6    5219    84.3  280.3    84.3   28.0  278.9
+2 1000 108.0      0  -88.6    5175    82.7  559.0    82.7   71.2  554.4
+3 2000 215.0      0  -89.3    5156    79.1 1108.6    79.1  209.6 1088.6
+  f_Hz Vam_mVp Vap_deg Var_mVp Vai_mVp Idc_mA Gain TGain
+1  500    5300    78.5  1058.5  5193.2     33   NA 11.50
+2 1000    5420    71.3  1739.5  5133.3     52   NA 11.59
+3 2000    5950    58.3  3124.8  5063.4     88   NA 11.64
+  f_Hz Zpm_ohm Zpp_deg Zpr_ohm Zpi_ohm Rz_ohm Cz_uF Lz_mH
+1  500    97.2    84.3     9.7    96.7    9.7  -3.3  30.8
+2 1000    47.9    82.7     6.1    47.5    6.1  -3.4   7.6
+3 2000    24.0    79.1     4.5    23.6    4.5  -3.4   1.9
+

@@ -1,0 +1,158 @@
+2018-11-23
+
+	Transformer Data Analysis
+	-------------------------
+
+Using R.
+    Re(z)
+    Im(z)
+    Mod(z)
+    Arg(z)
+    Conj(z)
+
+Read in data table
+% df <- read.table( "tran.tab", header=TRUE )
+
+Period of sine wave
+% Ts_us = (1 / df$f_Hz) * 1e6
+
+Phase of Vc
+% Vcp_deg = (df$Tc_us / Ts_us) * 360
+% Vcp_rad = (df$Tc_us / Ts_us) * 2 * 3.14159
+
+Phase of Va
+% Vap_deg = (df$Ta_us / Ts_us) * 360
+% Vap_rad = (df$Ta_us / Ts_us) * 2 * 3.14159
+
+Complex voltages
+% Vc = complex( modulus=df$Vc_mVp, argument=Vcp_rad )
+
+% Va_mVp = df$Va_Vp * 1000
+% Va = complex( modulus=Va_mVp, argument=Vap_rad )
+
+Primary voltage mV
+% Vp = Va - Vc
+
+Primary current mA
+% Ic = Vc / 10
+
+Primary power mW
+% Pp = Vp * Ic / 1000
+
+Primary impedance ohm
+% Zp = Vp / Ic
+
+
+
+> InFile <- "cload.tab"
+> source( "./trani.r" )
+> dg
+  f_Hz Ic_mA    Ppm_mW   Ppp_deg     Ppr_mW     Ppi_mW  Zpm_ohm  Zpp_deg
+1  500  53.7  280.2789 -92.85396  -13.95482  -279.9313 97.19453 84.26604
+2 1000 108.0  558.9502 -94.44115  -43.28160  -557.2720 47.92097 82.67885
+3 2000 215.0 1108.6245 -99.45702 -182.15404 -1093.5576 23.98322 79.10298
+
+> InFile <- "tran.tab"
+> source( "./trani.r" )
+> dg
+   f_Hz Ic_mA     Ppm_mW    Ppp_deg        Ppr_mW       Ppi_mW    Zpm_ohm
+1    62   4.8   24.25920  -19.04050   22.93193424    -7.914225 1052.91647
+2   125   7.7   38.67860   -8.48797   38.25495247    -5.709025  652.36302
+3   250  17.0   86.92078  -83.64730    9.61775504   -86.387038  300.76394
+4   500  35.6  185.26066  -91.57197   -5.08192536  -185.190941  146.17840
+5   600  43.5  229.00973  -92.09557   -8.37377656  -228.856587  121.02509
+6   800  57.5  298.82824  -90.01317   -0.06828969  -298.828232   90.38283
+7  1000  73.0  372.05656  -85.22703   30.95847569  -370.766306   69.81733
+8  1200  87.5  450.27950  -92.98310  -23.43256016  -449.669367   58.81202
+9  1400 103.1  532.76231  -92.91303  -27.07425915  -532.073927   50.12059
+10 2000 148.0  760.06233  -94.14668  -54.95908141  -758.072718   34.69970
+11 4000 290.0 1408.73695 -102.03780 -293.79990505 -1377.759563   16.75074
+    Zpp_deg
+1  16.67150
+2   4.11203
+3  78.35270
+4  81.22803
+5  85.02443
+6  82.78683
+7  76.05297
+8  83.27290
+9  82.47897
+10 81.53332
+11 73.64220
+
+----------------------------------------------------------------------------
+# Linear Model for Ic_mA
+----------------------------------------------------------------------------
+
+See:  http://r-statistics.co/Linear-Regression.html
+
+Source data as above.
+    dg = data.frame
+    dg$f_Hz	frequency
+    dg$Ic_mA	current
+
+Examine data to see suitability of linear model:
+    # (either form is ok)
+    scatter.smooth( x=dg$f_Hz, y=dg$Ic_mA )
+    scatter.smooth( dg$f_Hz, dg$Ic_mA )
+
+    # compute correlation
+    cor( dg$f_Hz, dg$Ic_mA )
+    [1] 0.999905
+
+Create linear model
+    linMod <- lm( Ic_mA ~ f_Hz, data=dg )
+    print( linMod )
+
+    Call:
+    lm(formula = Ic_mA ~ f_Hz, data = dg)
+
+    Coefficients:
+    (Intercept)         f_Hz
+       -0.27978      0.07295
+
+    These are coefficients for model:
+    Ic_mA = A + B*x
+	A= -0.27978	Intercept
+	B=  0.07295	Slope
+
+    The formula is in typical R form "Ic_mA ~ f_Hz" naming two heading names
+    in the data frame.
+
+Linear regression diagnostics:
+    # Show summary statistics for the model
+    # See:  ?summary.lm
+    > summary( linMod )
+
+	Call:
+	lm(formula = Ic_mA ~ f_Hz, data = dg)
+
+	Residuals:
+	     Min       1Q   Median       3Q      Max
+	-1.51131 -0.77564  0.01111  0.44451  2.38423
+
+	Coefficients:
+		      Estimate Std. Error t value Pr(>|t|)
+	(Intercept) -0.2797775  0.5126071  -0.546    0.598
+	f_Hz         0.0729478  0.0003352 217.654   <2e-16 ***
+	---
+	Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+	Residual standard error: 1.198 on 9 degrees of freedom
+	Multiple R-squared:  0.9998,    Adjusted R-squared:  0.9998
+	F-statistic: 4.737e+04 on 1 and 9 DF,  p-value: < 2.2e-16
+
+    The Coefficients is a little table.
+    The "Pr(>|t|)" is the "p Value", smaller is better.
+    The significance codes highlight the degree of significance in the estimate.
+    In this case, it looks like the f_Hz slope is very accurate, but
+    the Intercept is significant to no decimal places.
+
+    > plot( linMod )	# interactive plots of Residuals, Fitted, ...
+
+Plot the data with fit line:
+    plot( dg$f_Hz, dg$Ic_mA )
+    abline( a=-0.27978, b=0.07295 )
+    points( 0, 0, pch=3 )		# mark origin with +
+
+

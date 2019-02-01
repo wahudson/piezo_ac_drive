@@ -1,0 +1,36 @@
+2018-11-21
+	    Transformer AC Measurements
+	    ---------------------------
+
+From:  Bill's notebook 2018-11-21
+
+Transformer:  Talema 62020 Toroid
+
+Files:
+------
+README
+
+    Raw data from notebook:  output Vyellow= 60 Vpeak to Black
+    Sorted by f_Hz
+d_cload.tab	Cl= 0.002 uF capacitor load violet to yellow
+d_open.tab	No load
+d_open.tab,raw	No load, unsorted notebook order
+
+d_cload.out
+d_open.out
+
+tranimeas	processing script
+
+
+old/
+    cload.tab	Cl= 0.002 uF capacitor load violet to yellow
+    tran.tab	No load
+    b2.out
+    b3.out
+    notes.txt
+    tran_lab.tab
+    trani.r
+    tranimeas
+    tranimeas2
+    tranimeas3
+

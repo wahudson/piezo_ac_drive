@@ -1,0 +1,127 @@
+#!/usr/bin/Rscript --vanilla
+# 2018-11-24  William A. Hudson
+
+# Transformer Data Analysis
+# This one aligns Ic on the real axis before computing power or impedance.
+#
+# usage:  ./tranimeas < file.tab
+# Within R console:
+#     InFile <- "file.tab"
+#     source( "./tranimeas2" )
+#
+#----------------------------------------------------------------------------
+
+    Vto_mVp = 60000	# Transformer output, one winding
+
+# Check arguments.
+    arg = commandArgs( trailingOnly=TRUE )
+
+    if ( ! is.na( arg[1] ) ) {
+        stop( "usage:  tranimeas  < measure_table" )
+    }
+
+    if ( ! exists( "InFile" ) ) {
+	InFile <- "stdin"
+    }
+
+# Read in data table
+    df <- read.table( InFile, header=TRUE )
+
+# Period of sine wave
+    Ts_us <- (1 / df$f_Hz) * 1e6
+
+# Phase of Vc
+    Vcp_deg <- (df$Tc_us / Ts_us) * 360
+    Vcp_rad <- (df$Tc_us / Ts_us) * 2 * 3.14159
+
+# Phase of Va
+#   Vap_deg <- (df$Ta_us / Ts_us) * 360
+    Vap_rad <- (df$Ta_us / Ts_us) * 2 * 3.14159
+
+# Let Vc (and Ic) be the reference aligned to the real axis.
+    Va_rad = Vap_rad - Vcp_rad
+    Vc_rad = Vcp_rad - Vcp_rad		# zero
+
+# Complex voltages
+    Vc <- complex( modulus=df$Vc_mVp, argument=Vc_rad )
+
+    Va_mVp <- df$Va_Vp * 1000
+    Va <- complex( modulus=Va_mVp, argument=Va_rad )
+
+# Primary voltage mV
+    Vp <- Va - Vc
+
+# Primary current mA
+    Ic <- Vc / 10
+
+# Primary power mW
+    Pp <- Vp * Ic / 1000
+
+# Primary impedance ohm
+    Zp <- Vp / Ic
+
+# Model Zp as series R and C
+    Rz = Re(Zp)
+    Cz = -1 / ( 2 * 3.14 * df$f_Hz * Im(Zp) )
+    Lz = Im(Zp) / ( 2 * 3.14 * df$f_Hz )
+
+# Result dataframe
+    dg <- data.frame( f_Hz=df$f_Hz )
+
+    dg$Ic_mA   <- Mod(Ic)
+    dg$Ic_deg  <- round( (Arg(Ic) * 180 / 3.14159), digits=1 )
+    dg$Vc_deg  <- round( Vcp_deg, digits=1 )
+
+    dg$Vpm_mVp <- round(  Mod(Vp), digits=0 )
+    dg$Vpp_deg <- round( (Arg(Vp) * 180 / 3.14159), digits=1 )
+
+    dg$Ppm_mW  <- round(  Mod(Pp), digits=1 )
+    dg$Ppp_deg <- round( (Arg(Pp) * 180 / 3.14159), digits=1 )
+
+    dg$Ppr_mW  <- round(   Re(Pp), digits=1 )
+    dg$Ppi_mW  <- round(   Im(Pp), digits=1 )
+
+    d3 <- data.frame( f_Hz=df$f_Hz )
+
+    d3$Vam_mVp <- round(  Mod(Va), digits=1 )
+    d3$Vap_deg <- round( (Arg(Va) * 180 / 3.14159), digits=1 )
+    d3$Var_mVp <- round(   Re(Va), digits=1 )
+    d3$Vai_mVp <- round(   Im(Va), digits=1 )
+
+    d3$Idc_mA  <- round( df$Idc_mA, digits=1 )
+
+    d3$Gain    <- round( (Va_mVp / df$Vin_mVp), digits=2 )
+	# Amplifier gain
+    d3$TGain   <- round( (Vto_mVp / dg$Vpm_mVp), digits=2 )
+	# Transformer gain, one winding
+
+    d4 <- data.frame( f_Hz=df$f_Hz )
+    d4$Zpm_ohm <- round(  Mod(Zp), digits=1 )
+    d4$Zpp_deg <- round( (Arg(Zp) * 180 / 3.14159), digits=1 )
+    d4$Zpr_ohm <- round(  Re(Zp), digits=1 )
+    d4$Zpi_ohm <- round(  Im(Zp), digits=1 )
+    d4$Rz_ohm  <- round(  Rz, digits=1 )
+    d4$Cz_uF   <- round( (Cz * 1e6), digits=1 )
+    d4$Lz_mH   <- round( (Lz * 1e3), digits=1 )
+
+# Plot data
+
+#    print( df )
+    print( dg )
+    print( d3 )
+    print( d4 )
+
+#    plot( dg$f_Hz, dg$Ic_mA )
+#    plot( dg$f_Hz, dg$Ppm_mW )
+#    plot( dg$f_Hz, dg$Ppp_deg )
+#    plot( dg$f_Hz, dg$Ppr_mW )
+#    plot( dg$f_Hz, dg$Ppi_mW )
+
+    f_Hz = c( 0, 4000 )
+    mW   = c( -1500, 1500 )
+#    plot( f_Hz, mW, type="n" )
+#    points( dg$f_Hz, dg$Ppr_mW, col="blue" )
+#    points( dg$f_Hz, dg$Ppi_mW, col="red" )
+#    points( dg$f_Hz, dg$Ppm_mW )
+#    points( dg$f_Hz, dg$Ppp_deg )
+
