@@ -1,0 +1,38 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP AC_Driver_StepUp
+D AC Driver with step-up transformer
+$ENDCMP
+#
+$CMP GND
+D Power flag, ground
+K power-flag
+$ENDCMP
+#
+$CMP Micro_Con_X_6_cable
+D Conxall connector, cable mount, socket
+$ENDCMP
+#
+$CMP Micro_Con_X_6_panel
+D Conxall connector, pannel mount, pins
+K connector
+F http://www.switchcraft.com/Documents/NPB_C708_Micro_con_x_2_7.pdf
+$ENDCMP
+#
+$CMP Screw_Terminal_2x06
+D Generic screw terminal, single row, 01x06, script generated (kicad-library-utils/schlib/autogen/connector/)
+K screw terminal
+F ~
+$ENDCMP
+#
+$CMP VNN
+D Power flag, VNN, Negative Analog
+K power-flag
+$ENDCMP
+#
+$CMP VPP
+D Power flag, VPP, Positive Analog
+K power-flag
+$ENDCMP
+#
+#End Doc Library

@@ -1,0 +1,18 @@
+2019-01-04
+		Schematics for Piezo AC Driver - Kicad
+		--------------------------------------
+
+Files:
+------
+README		this file
+lib/		Library files for Kicad
+    _Local.bck
+    _Local.dcm
+    _Local.lib
+t1/		??
+tmp/
+v1/		version1 - solderless breadboard
+v1.xwd
+v3/		version3 - Star Ground, solderless breadboard
+v4/		version4 - Solder breadboard
+
