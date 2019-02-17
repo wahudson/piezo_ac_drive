@@ -415,15 +415,15 @@ Text Notes 7850 2300 0    50   ~ 0
 1:11.8
 Text Notes 7850 2900 0    50   ~ 0
 1:11.8
-Text GLabel 2200 3150 0    50   Input ~ 0
+Text GLabel 2200 3550 0    50   Input ~ 0
 VPP
 Text GLabel 2200 3350 0    50   Input ~ 0
 VGND
-Text GLabel 2200 3550 0    50   Input ~ 0
+Text GLabel 2200 3150 0    50   Input ~ 0
 VNN
-Text Notes 1300 3150 0    50   ~ 0
-+8 to +30 Vdc
 Text Notes 1300 3600 0    50   ~ 0
++8 to +30 Vdc
+Text Notes 1300 3150 0    50   ~ 0
 -8 to -30 Vdc
 $Comp
 L _Local:Micro_Con_X_6_panel J6
@@ -666,7 +666,7 @@ L _Local:Conn_Banana_Jack J3
 U 1 1 5C37E43A
 P 1550 5800
 F 0 "J3" H 1400 5800 50  0000 C CNN
-F 1 "Red" H 1200 5800 50  0000 C CNN
+F 1 "Green" H 1200 5800 50  0000 C CNN
 F 2 "" H 1550 5800 50  0001 C CNN
 F 3 "" H 1550 5800 50  0001 C CNN
 	1    1550 5800
@@ -688,7 +688,7 @@ L _Local:Conn_Banana_Jack J5
 U 1 1 5C3A316D
 P 1550 6100
 F 0 "J5" H 1400 6100 50  0000 C CNN
-F 1 "Green" H 1200 6100 50  0000 C CNN
+F 1 "Red" H 1200 6100 50  0000 C CNN
 F 2 "" H 1550 6100 50  0001 C CNN
 F 3 "" H 1550 6100 50  0001 C CNN
 	1    1550 6100
@@ -736,19 +736,8 @@ $EndComp
 Wire Wire Line
 	2400 3350 2950 3350
 $Comp
-L _Local:Head1_1 J2-1
-U 1 1 5C40469D
-P 2300 3150
-F 0 "J2-1" H 2150 3200 50  0000 C CNN
-F 1 "Head1_1" H 2300 2950 50  0001 C CNN
-F 2 "" H 2300 3150 50  0001 C CNN
-F 3 "" H 2300 3150 50  0001 C CNN
-	1    2300 3150
-	-1   0    0    -1  
-$EndComp
-$Comp
 L _Local:Head1_1 J2-3
-U 1 1 5C4046F5
+U 1 1 5C40469D
 P 2300 3550
 F 0 "J2-3" H 2150 3600 50  0000 C CNN
 F 1 "Head1_1" H 2300 3350 50  0001 C CNN
@@ -757,13 +746,24 @@ F 3 "" H 2300 3550 50  0001 C CNN
 	1    2300 3550
 	-1   0    0    -1  
 $EndComp
-Text Label 2650 3150 0    50   ~ 0
+$Comp
+L _Local:Head1_1 J2-1
+U 1 1 5C4046F5
+P 2300 3150
+F 0 "J2-1" H 2150 3200 50  0000 C CNN
+F 1 "Head1_1" H 2300 2950 50  0001 C CNN
+F 2 "" H 2300 3150 50  0001 C CNN
+F 3 "" H 2300 3150 50  0001 C CNN
+	1    2300 3150
+	-1   0    0    -1  
+$EndComp
+Text Label 2650 3550 0    50   ~ 0
 VPP
 Wire Wire Line
-	2400 3150 2650 3150
-Wire Wire Line
 	2400 3550 2650 3550
-Text Label 2650 3550 0    50   ~ 0
+Wire Wire Line
+	2400 3150 2650 3150
+Text Label 2650 3150 0    50   ~ 0
 VNN
 $Comp
 L _Local:GND #PWR?
@@ -812,9 +812,9 @@ X-input
 Text Notes 850  6500 0    50   ~ 0
 Y-input
 Text Notes 850  5850 0    50   ~ 0
-+V
-Text Notes 850  6150 0    50   ~ 0
 -V
+Text Notes 850  6150 0    50   ~ 0
++V
 Text Notes 850  6000 0    50   ~ 0
 GND
 Text Notes 6400 4800 0    50   ~ 0
