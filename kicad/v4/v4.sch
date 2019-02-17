@@ -1,4 +1,5 @@
 EESchema Schematic File Version 4
+LIBS:v4-cache
 EELAYER 26 0
 EELAYER END
 $Descr A4 11693 8268
@@ -17,8 +18,8 @@ $Comp
 L Amplifier_Audio:LM1875 U1
 U 1 1 5C2EAC3C
 P 3700 2200
-F 0 "U1" H 3700 2450 50  0000 L CNN
-F 1 "LM675" H 3700 2350 50  0000 L CNN
+F 0 "U1" H 3200 2550 50  0000 L CNN
+F 1 "LM675" H 3200 2450 50  0000 L CNN
 F 2 "Package_TO_SOT_THT:TO-220-5_P3.4x3.7mm_StaggerOdd_Lead3.8mm_Vertical" H 3700 2200 50  0001 C CIN
 F 3 "http://www.ti.com/lit/ds/symlink/lm1875.pdf" H 3700 2200 50  0001 C CNN
 	1    3700 2200
@@ -864,4 +865,8 @@ Wire Notes Line
 	6000 2300 6050 2250
 Wire Notes Line
 	6050 2250 6100 2300
+Text Notes 3800 2500 0    50   ~ 0
+100V
+Text Notes 3800 1950 0    50   ~ 0
+100V
 $EndSCHEMATC
