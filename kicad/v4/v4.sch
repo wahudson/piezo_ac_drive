@@ -6,9 +6,9 @@ $Descr A4 11693 8268
 encoding utf-8
 Sheet 1 1
 Title "Piezo AC Driver - v4, Protoboard"
-Date "2019-01-05"
+Date "2019-02-17"
 Rev ""
-Comp ""
+Comp "William A. Hudson"
 Comment1 ""
 Comment2 ""
 Comment3 ""
@@ -869,4 +869,20 @@ Text Notes 3800 2500 0    50   ~ 0
 100V
 Text Notes 3800 1950 0    50   ~ 0
 100V
+Text Notes 7300 3350 0    50   ~ 0
+Ratio:  1:23.6  as shown
+Text Notes 2700 1550 0    50   ~ 0
+Gain= 10.1
+Text Notes 950  1900 0    50   ~ 0
+Input:  AC  50 Hz to 4 kHz\n    0.0 to 1.0 Vpeak (0.71 Vrms)\n    1 kohm input impedance
+Text Notes 5700 3150 0    50   ~ 0
+3W
+Text Notes 7300 3450 0    50   ~ 0
+Lo side current:  715 mA rms parallel
+Text Notes 8800 2250 0    50   ~ 0
+240 Vpeak
+Text Notes 8800 3000 0    50   ~ 0
+240 Vpeak
+Text Notes 7300 3550 0    50   ~ 0
+Hi side current:   30 mA rms series
 $EndSCHEMATC
