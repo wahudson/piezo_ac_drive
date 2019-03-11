@@ -1,0 +1,54 @@
+2019-02-25
+		Piezo AC Driver - User Guide
+		----------------------------
+
+
+----------------------------------------------------------------------------
+## Summary Specification
+----------------------------------------------------------------------------
+
+		    Piezo AC Driver - Version v4
+		    ----------------------------
+
+DC Power input:  -V, GND, +V
+    V= 8 V to 24 V DC
+    User limit Current:  < 300 mA per amplifier
+    Caution:  Double-check correct polarity.
+
+AC Input:  Xin, Yin
+    AC sinusoid, no DC offset.
+    Amplitude:  0 to 2.0 Vpeak (1.41 Vrms)
+    Frequency:  100 Hz to 2 kHz
+    Input impedance:  1 kohm
+
+Gain:  120
+
+Output:    Danger!  High Voltage
+    Complementry Outputs, each output.
+    Is input signal amplitude x 120
+    User Limit amplitude:  240 Vpeak maximum (170 Vrms).
+    Maximum load:  2 nF capacitance, or 40 kohm resistance, or 6 mA
+
+Fuse:  700 mA, Fast blow, 5mm x 20mm glass cartridge, BelFuse 5MF 700-R
+    Fuse is on the OpAmp output to Transformer Primary winding.
+    Exceeding above input amplitude or frequency will likely blow the fuse.
+
+Operating principle:
+    Power OpAmp driving a step-up transformer.
+
+Danger!
+    High Voltage
+    Exposed terminals
+    Output connectors rated 300V only for hands-free use.
+    Disable AC Input before operating output connectors.
+
+Caution!
+    Laboratory prototype unit.
+    User must observe limits to avoid damage.
+    Transformer output is floating, option to ground center tap.
+
+
+Specification intended to identify a safe operating region for driving
+a Piezo Tube rated at 1.1 nF capacitance and 500 Vdc maximum.
+Nominal frequency 1 kHz.
+
