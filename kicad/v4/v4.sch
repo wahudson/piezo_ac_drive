@@ -5,8 +5,8 @@ EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
 Sheet 1 1
-Title "Piezo AC Driver - v4, Protoboard"
-Date "2019-02-17"
+Title "Piezo AC Driver - v4b, Protoboard"
+Date "2019-03-27"
 Rev ""
 Comp "William A. Hudson"
 Comment1 ""
@@ -798,7 +798,7 @@ Vc
 Wire Wire Line
 	5900 2200 6100 2200
 Wire Wire Line
-	5900 3000 6100 3000
+	5900 3000 6000 3000
 Text Notes 1100 3000 0    50   ~ 0
 DC Power
 Wire Notes Line
@@ -885,4 +885,31 @@ Text Notes 8800 3000 0    50   ~ 0
 240 Vpeak
 Text Notes 7300 3550 0    50   ~ 0
 Hi side current:   30 mA rms series
+$Comp
+L Connector:TestPoint_Alt TP1
+U 1 1 5CA2AFDA
+P 5400 2200
+F 0 "TP1" H 5350 2400 50  0000 L CNN
+F 1 "TestPoint_Alt" H 5458 2229 50  0001 L CNN
+F 2 "" H 5600 2200 50  0001 C CNN
+F 3 "~" H 5600 2200 50  0001 C CNN
+	1    5400 2200
+	1    0    0    -1  
+$EndComp
+$Comp
+L Connector:TestPoint_Alt TP2
+U 1 1 5CA2B247
+P 6000 3000
+F 0 "TP2" H 6100 3250 50  0000 R CNN
+F 1 "TestPoint_Alt" H 6058 3029 50  0001 L CNN
+F 2 "" H 6200 3000 50  0001 C CNN
+F 3 "~" H 6200 3000 50  0001 C CNN
+	1    6000 3000
+	1    0    0    1   
+$EndComp
+Connection ~ 6000 3000
+Wire Wire Line
+	6000 3000 6100 3000
+Text Notes 3150 7500 0    50   ~ 0
+Optional Ground Connection
 $EndSCHEMATC
