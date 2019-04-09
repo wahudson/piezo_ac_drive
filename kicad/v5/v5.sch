@@ -6,7 +6,7 @@ $Descr A4 11693 8268
 encoding utf-8
 Sheet 1 1
 Title "Piezo AC Driver - v5, Protoboard"
-Date "2019-04-01"
+Date "2019-04-08"
 Rev ""
 Comp "William A. Hudson"
 Comment1 "https://github.com/wahudson/piezo_ac_drive"
@@ -422,9 +422,9 @@ VGND
 Text GLabel 2200 3150 0    50   Input ~ 0
 VNN
 Text Notes 1300 3600 0    50   ~ 0
-+8 to +30 Vdc
++8 to +24 Vdc
 Text Notes 1300 3150 0    50   ~ 0
--8 to -30 Vdc
+-8 to -24 Vdc
 $Comp
 L _Local:Micro_Con_X_6_panel J6
 U 1 1 5C32C812
@@ -791,7 +791,7 @@ High Voltage Output
 Text Notes 1650 4800 0    100  ~ 0
 2-Channel Prototype
 Text Notes 550  5700 0    50   ~ 0
-Power  V= 8 to 30 Vdc
+Power  V= 9 to 24 Vdc
 Text Notes 5750 5450 0    50   ~ 0
 Yellow
 Text Notes 5750 5550 0    50   ~ 0
@@ -843,7 +843,7 @@ Ratio:  1:23.6  as shown
 Text Notes 2700 1550 0    50   ~ 0
 Gain= 10.1
 Text Notes 950  1900 0    50   ~ 0
-Input:  AC  50 Hz to 4 kHz\n    0.0 to 1.0 Vpeak (0.71 Vrms)\n    1 kohm input impedance
+Input:  AC  50 Hz to 2 kHz\n    0.0 to 2.0 Vpeak (1.41 Vrms)\n    1 kohm input impedance
 Text Notes 5700 3150 0    50   ~ 0
 3W
 Text Notes 7300 3450 0    50   ~ 0
@@ -1095,4 +1095,6 @@ Wire Notes Line
 	3450 7500 2050 7500
 Wire Notes Line
 	2050 7500 2050 5500
+Text Notes 1650 900  0    100  ~ 0
+AC_Driver_Stepup
 $EndSCHEMATC

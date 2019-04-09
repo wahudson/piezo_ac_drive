@@ -5,14 +5,14 @@
 Files:
 ------
 README		this file
-lib/		Library files for Kicad
+lib/		Library files for Kicad, local symbols for this project
     _Local.bck
     _Local.dcm
     _Local.lib
 t1/		??
-tmp/
 v1/		version1 - solderless breadboard
 v1.xwd
 v3/		version3 - Star Ground, solderless breadboard
 v4/		version4 - Solder breadboard
+v5/		version5 - 2-channel prototype, reverse polarity protection
 
