@@ -1,17 +1,18 @@
-2019-02-25
-		Piezo AC Driver - User Guide
-		----------------------------
+2019-04-12
+		    Piezo AC Driver - User Guide
+		    ----------------------------
 
+https://github.com/wahudson/piezo_ac_drive/
 
 ----------------------------------------------------------------------------
 ## Summary Specification
 ----------------------------------------------------------------------------
 
-		    Piezo AC Driver - Version v4
+		    Piezo AC Driver - Version v5
 		    ----------------------------
 
 DC Power input:  -V, GND, +V
-    V= 8 V to 24 V DC
+    V= 9 V to 24 V DC
     User limit Current:  < 300 mA per amplifier
     Caution:  Double-check correct polarity.
 
@@ -21,20 +22,28 @@ AC Input:  Xin, Yin
     Frequency:  100 Hz to 2 kHz
     Input impedance:  1 kohm
 
-Gain:  120
+Gain:  120  (2 Vpeak input, 240 Vpeak output)
+    Amplifier is not calibrated.  Measure the output voltage and adjust the
+    input amplitude accordingly.
 
 Output:    Danger!  High Voltage
-    Complementry Outputs, each output.
+    Complementry Outputs, each output to transformer center-tap.
     Is input signal amplitude x 120
     User Limit amplitude:  240 Vpeak maximum (170 Vrms).
     Maximum load:  2 nF capacitance, or 40 kohm resistance, or 6 mA
+    Outputs are isolated.  User option to choose ground location.
 
 Fuse:  700 mA, Fast blow, 5mm x 20mm glass cartridge, BelFuse 5MF 700-R
     Fuse is on the OpAmp output to Transformer Primary winding.
     Exceeding above input amplitude or frequency will likely blow the fuse.
 
+Heat Sinks:  on power op-amps
+    Limit heat sink temperature rise to 50 degC.
+    The LM675 op-amp has internal over-temperature shutdown.
+    The heat sink is rated 4.7 degC/W heat sink to ambient.
+
 Operating principle:
-    Power OpAmp driving a step-up transformer.
+    Power OpAmp driving a step-up transformer.  See schematic.
 
 Danger!
     High Voltage
@@ -49,6 +58,11 @@ Caution!
 
 
 Specification intended to identify a safe operating region for driving
-a Piezo Tube rated at 1.1 nF capacitance and 500 Vdc maximum.
+a Piezo Tube rated at 1.1 nF capacitance and 250 Vdc maximum.
 Nominal frequency 1 kHz.
+
+
+----------------------------------------------------------------------------
+## User Guide
+----------------------------------------------------------------------------
 
