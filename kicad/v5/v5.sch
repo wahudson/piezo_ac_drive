@@ -5,13 +5,13 @@ EELAYER END
 $Descr A 11000 8500
 encoding utf-8
 Sheet 1 1
-Title "Piezo AC Driver - v5, Protoboard"
-Date "2019-04-08"
+Title "Piezo AC Driver - v5b, Protoboard"
+Date "2019-05-15"
 Rev ""
 Comp "William A. Hudson"
 Comment1 "https://github.com/wahudson/piezo_ac_drive"
-Comment2 ""
-Comment3 ""
+Comment2 "v5  - Power reverse polarity protection."
+Comment3 "v5b - Floating transformer output.  Output shield grounded."
 Comment4 ""
 $EndDescr
 $Comp
@@ -500,11 +500,7 @@ F 3 " ~" H 1450 4950 50  0001 C CNN
 	-1   0    0    -1  
 $EndComp
 Wire Wire Line
-	6800 5500 6900 5500
-Wire Wire Line
-	6900 5500 6900 4800
-Wire Wire Line
-	6900 4800 7500 4800
+	7200 4800 7500 4800
 Wire Wire Line
 	6800 5600 7000 5600
 Wire Wire Line
@@ -517,8 +513,6 @@ Wire Wire Line
 	7100 5700 7100 5200
 Wire Wire Line
 	7100 5200 7500 5200
-Wire Wire Line
-	6800 5800 8400 5800
 Wire Wire Line
 	8400 5800 8400 5200
 Wire Wire Line
@@ -578,22 +572,14 @@ Wire Wire Line
 	6200 6450 6200 6000
 Wire Wire Line
 	6200 6000 6300 6000
-Wire Wire Line
-	6800 5800 6850 5750
-Wire Wire Line
-	6850 5750 6850 5550
-Wire Wire Line
-	6850 5550 6800 5500
-Connection ~ 6800 5800
-Connection ~ 6800 5500
 Text Label 7200 4800 0    50   ~ 0
-OGnd
+Shield
 Text Label 7200 5000 0    50   ~ 0
 X_Vsp
 Text Label 7200 5200 0    50   ~ 0
 X_Vsn
 Text Label 8250 5200 0    50   ~ 0
-OGnd
+Shield
 Text Label 8250 5000 0    50   ~ 0
 Y_Vsp
 Text Label 8250 4800 0    50   ~ 0
@@ -673,8 +659,6 @@ Text Notes 5100 2600 0    50   ~ 0
 100V
 Text Notes 5650 2400 0    50   ~ 0
 100V
-Wire Wire Line
-	6800 5800 6850 5850
 Wire Wire Line
 	1600 5550 1750 5600
 Wire Wire Line
@@ -788,9 +772,9 @@ Text Notes 750  5600 0    50   ~ 0
 GND
 Text Notes 7450 4400 0    50   ~ 0
 High Voltage Output
-Text Notes 1550 4400 0    100  ~ 0
+Text Notes 1700 4600 0    100  ~ 0
 2-Channel Prototype
-Text Notes 450  5300 0    50   ~ 0
+Text Notes 600  5300 0    50   ~ 0
 Power  V= 9 to 24 Vdc
 Text Notes 5650 5050 0    50   ~ 0
 Yellow
@@ -880,7 +864,7 @@ Connection ~ 6000 3000
 Wire Wire Line
 	6000 3000 6100 3000
 Text Notes 3700 7300 0    50   ~ 0
-Optional Ground Connection
+Ground Connection
 $Comp
 L Diode:1N4002 D11
 U 1 1 5CA4F71A
@@ -1086,9 +1070,7 @@ Wire Notes Line
 Text Notes 2100 7050 0    50   ~ 0
 Reverse Polarity Protection
 Wire Wire Line
-	6850 5850 6300 7200
-Wire Wire Line
-	1750 7200 6300 7200
+	1750 7200 5700 7200
 Wire Notes Line
 	3350 5100 3350 7100
 Wire Notes Line
@@ -1097,4 +1079,10 @@ Wire Notes Line
 	1950 7100 1950 5100
 Text Notes 1650 900  0    100  ~ 0
 AC_Driver_Stepup
+Wire Wire Line
+	8400 5800 7200 5800
+Wire Wire Line
+	7200 5800 5700 7200
+NoConn ~ 6800 5500
+NoConn ~ 6800 5800
 $EndSCHEMATC
