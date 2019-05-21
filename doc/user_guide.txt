@@ -1,15 +1,12 @@
-2019-04-12
-		    Piezo AC Driver - User Guide
-		    ----------------------------
+2019-05-16
+		Piezo AC Driver v5b - User Guide
+		--------------------------------
 
 https://github.com/wahudson/piezo_ac_drive/
 
 ----------------------------------------------------------------------------
 ## Summary Specification
 ----------------------------------------------------------------------------
-
-		    Piezo AC Driver - Version v5
-		    ----------------------------
 
 DC Power input:  -V, GND, +V
     V= 9 V to 24 V DC
@@ -49,7 +46,7 @@ Danger!
     High Voltage
     Exposed terminals
     Output connectors rated 300V only for hands-free use.
-    Disable AC Input before operating output connectors.
+    Disable AC signal input before operating output connectors.
 
 Caution!
     Laboratory prototype unit.
@@ -61,8 +58,103 @@ Specification intended to identify a safe operating region for driving
 a Piezo Tube rated at 1.1 nF capacitance and 250 Vdc maximum.
 Nominal frequency 1 kHz.
 
-
+
 ----------------------------------------------------------------------------
 ## User Guide
 ----------------------------------------------------------------------------
+
+Input/Power Sequencing:
+    Recomend turn ON power supplies first, then apply Input signal.
+    Reverse order when powering down.
+
+    The positive and negative power supplies can be applied in either order.
+
+    The LM675 op-amp is not rated for input voltage exceeding power supply
+    voltage.  Although this happens when the power supply is OFF and the input
+    signal is still applied, no damage seems to result.
+    Use a 50 ohm output impedance (or greater) signal source to help limit
+    input current in this condition.
+
+High Voltage Output disable:
+    The best way is to disable the input signal, leaving the power ON.
+    With no input signal, the transformer output is zero, and there is
+    no high voltage anywhere in the device.  The transformer coil resistance
+    will discharge any capacitance on the output.
+
+    Connectors have a limited number of mating cycles before they become
+    unreliable.  Avoid using them to disable the output.
+
+    Often the function generator signal source has an output disable feature.
+
+    Powering down is not recommended, as it aggravates input/power sequencing
+    issues.
+
+Output Amplitude monitor:
+    Use an AC Voltmeter to measure RMS (Root Mean Square) voltage.  Many
+    meters are rated for frequencies to 10 kHz or 100 kHz.  Two ways:
+
+    A) Measure input voltage and multiply by Gain= 120 to get output voltage.
+
+    B) Measure output voltage directly.  CAUTION:  Disable output while
+    connecting meter, or use appropriate probes.
+    Typically measure from transformer center tap (Black+Red) to either output.
+    Measuring accross both outputs (Yellow - Violet) will give twice the
+    voltage, e.g. 480 Vpeak (340 Vrms).
+
+Transformer Output:
+    The transformer output winding is naturally isolated (floating).
+    It can be optionally grounded in various ways - inspect the device to
+    see what was done.  Two options:
+    A) When floating, the load determines the ground reference, which
+	should be roughly mid-way between the differential outputs.
+    B) Ground the transformer center tap (Black+Red) to provide a
+	ground-referenced differential output.
+    Version v5 was designed for differential output, and grounding one side
+    may exceed insulation voltage ratings.
+
+Input signal:
+    Caution when using a function generator with output amplitude setting
+    corrected for 50-ohm/High-Z load.  Use the High-Z load setting.
+    Using the 50-ohm setting will double the function generator output
+    voltage, as the 50 ohm load (forming a voltage divider) is not present.
+
+Power Dissipation:
+    Quiescent power supply current (with no input signal) should be
+	Isupply < 55 mA.
+
+    Virtually all the input power (from DC power supply) is dissipated in
+    the op-amps.  This factor of 2 is from +V = -V (bipolar) supplies.  The
+    current Isupply should be roughly the same for both +V and -V supplies.
+	P = (2 * Vsupply) * Isupply  = total power, both amplifiers
+    Keep each amplifier below 14 W.
+    (Total 28 W only if both amplifiers are driven the same.)
+
+    Power dissipation can be reduced by lowering the power supply voltage.
+    However, allow 3 V headroom for op-amp peak output voltage below power
+    supply voltage:
+	Vo_max <= Vsupply - 3 V
+    Check output for clipping with an oscilloscope.
+
+Heat Sink Temperature:
+    Heat sinks are electrically isolated.
+    Expected heat sink temperature rise (delta T) is roughly:  (best case)
+	dT = 72 degC  at 14 W
+	dT = 50 degC  at 10 W
+
+    You can cautiously check heat sink temperature by hand.  Use the back
+    of your finger, as it is more sensitive, holding it in the air above
+    the heat sink.  If that feels too hot, don't touch it.
+
+Thermal Shutdown:
+    The LM675 op-amp will shut down at 150 degC junction temperature.
+    If the output shuts down, check heatsink temperature and reduce
+    operating conditions.
+    It will cycle on again as temperature drops to 145 degC.
+    Avoid thermal shutdown cycling as the stress reduces reliability.
+
+Output Connector Cable:
+    Cable is Cat5e, rated 300 Vrms, shielded, with two twisted pairs.
+    pins 1, 4:   shield connected to both pins
+    pins 2, 3:   orange, orange-white  twisted
+    pins 5, 6:   blue,   blue-white    twisted
 
