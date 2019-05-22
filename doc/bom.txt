@@ -1,0 +1,149 @@
+2019-03-19
+		Bill of Material - Piezo AC Driver v4
+		-------------------------------------
+
+This is what was used.
+Tolerances may vary, most items are not critical.
+Some components were on-hand, and not priced.
+
+
+    Quantity  Item
+    --------  --------------------------------------------------------------
+
+PCB Assembly (for 1-channel):
+
+    2  Capacitor, 220 uF, 100 V, +-20%, Electrolytic,
+	    $1.27, Rubycon 100ZLJ220M12.5X25
+	    Co, C4
+
+    2  Capacitor, 10 uF,  50 V, +-10%, X7R, Ceramic MLC, 0.100 lead spacing,
+	    $1.54, TDK FG11X7R1H106KRT06
+	    C2, C3
+
+    1  Capacitor, 1.0 uF, 100 V, +-10%, X7R, Ceramic MLC, 0.200 lead spacing,
+	    $0.67, Kemet C340C105K1R5TA
+	    C1
+
+    2  Capacitor, 0.1 uF, 100 V, +-10%, X0U, Ceramic MLC, 0.100 lead spacing,
+	    Vishay K104K15X0UH53H5H
+	    Cka, Ckb
+
+    1  Resistor, 2.0 ohm, 3 W, 5%, Wire Wound,
+	    $0.57,  Vishay AC03000002008JAC00
+	    Rc
+
+    1  Resistor, 9.1 kohm, 0.25 W, 5%, Carbon,
+	    Rf
+
+    2  Resistor, 1.0 kohm, 0.25 W, 1%, Metal Film, 100 ppm,
+	    $1.97/50, Stackpole RNF14FTD1K00
+	    Ri, R1
+
+    1  Resistor, 3.3 ohm,  0.25 W, 5%, Carbon,
+	    Rk
+
+    1  LM675 Power Operational Amplifier, 3A, TO220-5 package
+	    $5.70, Texas Instruments  LM675T/NOPB
+	    U1
+
+    1  Thermasil3 Thermal Pad TO-220 mounting kit
+	    $2.64  DigiKey  4880SG-ND,  Aavid 4880SG
+
+    1  Heatsink, TO-220, W-shaped fanned fins on single side.
+	    $2.76  DigiKey  294-1082-ND,  CTS 7-345-2PP-BA
+
+    1  Angle Bracket, 3/8 inch wide, 1.625 L, Aluminum,
+	    $0.57  Digikey  36-622-ND, Keystone 622
+	    Drill holes for heatsink mount.
+
+    1  Breadboard PCB, DIN rail, 3.42"L x 1.29"W
+	    $3.60  DigiKey  377-2076-ND, Bud Industries  DMB-4770-CB
+	    Cut in half.
+
+    1  Header Male pins, 0.100 inch pitch, 1-row, solder.
+	    $0.99  DigiKey  609-3253-ND  20 pin, 30ui gold, 0.095 in tail
+	    Cut for 3-pin power, 2-pin input/output, and 1-pin test point
+	    connectors.
+	    J1, J2, J3, TP1, TP2
+
+    1  Transformer, 5.0 VA, 7v/14V secondary, 115V/230V primary, Toroid
+	    $20.77, Talema 62020
+	    T1
+
+    1  Fuse Block, 5mm x 20mm fuse, Solder terminal
+	    $1.51  DigiKey  F1503-ND,  Littelfuse 05200004Z
+	    Drill out mounting hole for #4-40 screw.
+	    Recomend choose a different one.
+	    F1
+
+    1  Fuse cartridge, 5mm x 20mm, 700mA, 0.265 A2s, glass, Fast
+	    $0.21  DigiKey   507-1260-ND, BelFuse 5MF 700-R
+	    F1
+
+    1  BNC Female barrel, with locknut and solder lug,
+	    $2.00  DigiKey  ARFX1064-ND  Amphenol 31-221-RFX
+
+    1  Header Female socket, 0.100 inch pitch, 3-position, 1-row, 22AWG IDC,
+	    Free hanging,
+	    $0.21  DigiKey  A31081-ND, AMP 3-640440-3  3-pos Female Socket
+
+    2  Header Female socket, 0.100 inch pitch, 2-position, 1-row, 22AWG IDC,
+	    Free hanging,
+	    $0.15  DigiKey  A31080-ND  AMP 3-640440-2  2-pos Female Socket
+
+
+Common for 2-Channels:
+
+    1  Connector, Receptical pins, Circular, 6-position solder cup,
+	    Conxall/Switchcraft  Micro-CON-X
+	    $7.37  DigiKey  SC1413-ND, Conxall 17982-6PG-300
+
+    Banana Jack, Solder tab
+    1  $0.65  DigiKey  J152-ND, Cinch 108-0903-001  Black
+    1  $0.65  DigiKey  J151-ND, Cinch 108-0902-001  Red
+    1  $0.63  DigiKey  J153-ND, Cinch 108-0904-001  Green
+
+    1  Barrier Strip, Double row screws, 6-position, 300V, 15A, Flange mount,
+	    $3.74  DigiKey  WM23142-ND  Molex 0387700306
+
+    1  Wood base board, 6 inch pine, 3/4 inch thick, 5-7/16 inch wide.
+	    Cut 9 inch long.
+
+    2  Aluminum Angle, 1 inch x 1 inch, 1/16 inch thick.
+	    Cut 5-5/16 inch long.
+	    Drill and file holes to mount connectors.
+
+
+Hardware (for 2 channels):
+
+    4  Stand-off, nylon, 0.25 inch long, for #4 screws,
+	    For PCB mount.
+	    $0.17  Ace Hardware
+
+    4  Screw, #4, 1 inch long, Sheet metal, pan head, philips,
+	    For PCB mount.
+	    $0.11  Ace Hardware
+
+    2  Screw, #6, 5/8 inch long, Sheet metal, pan head, philips,
+	    For heatsink angle bracket mount.
+
+    2  Screw, #4-40, 3/8 inch long, machine screw, pan head,
+    2  Nut,   #4-40,
+    2  Lock Washer, #4,
+	    For heatsink mount to angle bracket.
+
+    2  Screw, #8, 1 inch long, Sheet metal, pan head, philips,
+	    For Transformer mount.  With rubber washer.
+
+    2  Screw, #4, 5/8 inch long, Sheet metal, pan head, philips,
+	    For Fuse Block mount.
+
+    4  Screw, #6, 5/8 inch long, Sheet metal, pan head, philips,
+	    For Connector Aluminum Angle.
+
+    2  Screw, #6, 5/8 inch long, Sheet metal, pan head, philips,
+	    For Terminal Strip mount.
+
+
+Output Cable Assembly:
+
