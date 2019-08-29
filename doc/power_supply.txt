@@ -1,0 +1,174 @@
+2019-08-26
+		Power Supply - Design
+		---------------------
+
+A dedicated power supply for the Piezo_AC_Driver.
+
+We decided this would be a good next step, and would free up an expensive
+lab bench power supply.
+
+----------------------------------------------------------------------------
+## Requirements:
+----------------------------------------------------------------------------
+
+    Provide +V and -V DC power (dual supply) for the Piezo_AC_Driver.
+
+    Output Current:  At least 600 mA.
+
+    Output Voltage:  V= 24 Vdc
+	Minimum operational is 12 V.
+	Amplifier needs ~2 V headroom before signal is clipped.
+	Polarity protection diodes use ~1 V of input power supply.
+	Transformer gain is 11.8
+	OpAmp output = 250 V peak / 11.8 = 21.2 V peak
+	Thus 24 V supply - 21.2 V peak = 2.8 V headroom.
+	This is good enough for full output voltage swing.
+
+    Input:  is 120 VAC line cord.
+
+    Fixed output voltage.
+
+    Apply appropriate safety features.  e.g.
+	Fuse.
+	Power switch.
+	All AC line voltage points covered from human contact.
+	Enclosure fully insulated, or earth grounded if metal.
+
+    Current meter:  Would be nice to help monitor Piezo_AC_Driver, since
+	it a lab proto device.
+
+
+----------------------------------------------------------------------------
+## Strategy:
+----------------------------------------------------------------------------
+
+    A) Buy a complete solution.
+	This looks a lot like a lab bench power supply.
+	++ Save time, just buy it.
+	- Cost may be a bit high.  Cheapest around $300 to $450
+	- Banana Plug outputs, are prone to accidental re-arrangement.
+	- Two single output supplies is awkward.
+	+ Could be re-used on other projects.
+	- Tend to be higher current than needed.
+	+ Adjustable voltage is typical, help reduce OpAmp power dissapation.
+	Two FLIR Extech 382200       $300  single 0-30V, 0-1A
+	One Global Specialties 1320  $465  dual 0-30V, 0-3A
+
+    B) Package bare power supply(s) with fuse, power cord, and switch.
+	Buy AC to DC power supply module(s).
+	+ Lower cost.  Maybe around $85 to $100 (materials only).
+	-- Effort to design and assemble.
+	+ Customize to better suit needs.  Hardwire output cable.
+	+ Closer to a finished self-contained scanner.
+	Very simple design - just connect it up.
+	The main issue is safety protection for the AC wiring.
+	Could all terminals be covered with heat-shrink or tape?
+
+    C) Is (B), but add features - current meter, DC output switch.
+	+ Better features for lab development.
+	- More complexity to design and build.
+
+ x  D) Design own transformer/rectifier/regulator system.
+	-- Way too much work and time.
+	-- No significant benefits.
+	- Probably won't save any cost.
+	Not reasonable for this purpose.
+
+----------------------------------------------------------------------------
+## Design:  (B) Package bare power supply(s)
+----------------------------------------------------------------------------
+
+AC to DC Converters - 24 Vdc
+----------------------------
+
+    Bel HAA24-0.6-AG  +-24 V, 0.6 A  Dual, Linear
+	Ripple noise:  8 mVpp
+	Size:  6.5 x 4.0 x 2.1 inch
+	https://belfuse.com/resources/datasheets/powersolutions/ds-bps-linear-series.pdf
+	$73.38  DigiKey  Bel HAA24-0.6-AG
+
+    SL Power/Condor  +-24 V, 0.6 A  Dual, Linear
+	Adjustable down to +-18 V 0.4 A
+	Ripple noise:  51 mVpp
+	https://www.slpower.com/data/collateral/Linears_DS.pdf
+	$96.65  DigiKey  SL Power HAA24-0.6-A+G
+
+    CUI  +24 V, 850 mA, Single, Enclosed, Switching, 20 W
+	Encapsulated module with screw terminal strips.
+	Over current:  110 %, auto restart
+	Short Circuit:  continuous, auto restart
+	Over voltage:  30 Vdc at 24 V output
+	Ripple noise:  50 mVpp
+	Size:  3.783 x 2.126 x 1.220 inch
+	Weight:  170 g
+	Good datasheet.
+	https://www.cui.com/product/resource/digikeypdf/vsk-s20-t_series.pdf
+ >      $33.32  DigiKey  CUI VSK-S20-24U-T
+
+    TDK-Lambda LS Series  Single, Enclosed, Switching
+	LS25-24:  +24 V, 1.1 A, 25 W
+	Metal screen enclosure.
+	Voltage adjust:  22.0 to 27.6 V
+	Over current:  110 %
+	Over voltage:  27.6 to 32.4 V at 24 V output
+	Load reg:  192 mV,  Line reg:  96 mV
+	Ripple noise:  120 mV
+	LED indicator:  Green  power on
+	Size:  3.2 x 2.0 x 1.1 inch
+	Weight:  170 g
+	https://www.us.tdk-lambda.com/ftp/Specs/ls.pdf
+	$17.61  DigiKey  TDK-Lambda LS25-24, 24 V, 1.1 A
+
+    The linear power supplies are big, heavy, and more expensive.
+	Their ripple is typically very low, but is at 60 Hz, which is in
+	a range we might want for the piezo tube.
+    The TDK-Lambda is very low cost, but I don't like the metal enclosure and
+	the ripple noise is higher.
+    The CUI looks best.  Fully insulated enclosure.
+
+
+Current Meters - Digital panel meters
+--------------
+  
+    Murata  DCA-20PC Series
+	Power supply:  5-40 Vdc, or 36-75 Vdc
+	Accuracy:  +-0.1% FS
+	Current ranges:  199.9 uA to 19.99 A  (different models)
+	Shunt:  20 mV    100 ohm  to 0.001 ohm
+	Low-side and high-side sensing (different models)
+	Display:  9.4 mm digits, Red, Green, or Blue
+	Screw terminals.
+	Good datasheet.  Explains how connections work.
+	https://www.murata-ps.com/data/meters/dca20pc.pdf
+	$54.00 DigiKey  Murata DCA-20PC-5-DC1-RL-C, 1.999 A, Red, low side
+	$64.00 DigiKey  Murata DCA-20PC-5-DC4-RL-C, 1.999 A, Red, isolated
+
+    AdaFruit 574  Current Meter, 9.99 A FS
+	Power supply:  4.5 V to 30 V, 25 mA max
+	Current range:  9.99 A
+	Accuracy:  about 4%
+	https://www.adafruit.com/product/574
+	$9.95 DigiKey  AdaFruit 574, Red LED, 9.99 A
+
+    DFRobot  LED Current Meter, 9.99 A FS
+	Power supply:  4 V to 30 V
+	Accuracy:  about 2%
+	Very poor datasheet.  Shunt is visible, not easily changed.
+	https://www.dfrobot.com/product-939.html
+	https://media.digikey.com/pdf/Data%20Sheets/DFRobot%20PDFs/DFR0244_Web.pdf
+ >	$7.00 DigiKey  DFRobot DFR0244-R,   Red LED, 9.99 A
+	$7.00 DigiKey  DFRobot DFR0244-G, Green LED, 9.99 A
+
+
+    The Murata meter is clearly much better.
+    The AdaFruit and DFRobot are probably good enough for our purpose.
+
+
+Line Cord Connection
+--------------------
+
+    Delta Power entry modules
+	$8.51 DigiKey  Delta  10C2  fuse, switch
+
+    Filtered ~$20
+
